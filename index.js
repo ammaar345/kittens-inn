@@ -60,7 +60,9 @@ app.post("/booking", function (req, res) {
 	const days = req.body.days && Number(req.body.days);
 	const name = req.body.name;
 	const arrivingOn = req.body.day;
+	const INSERT_QUERY = "insert into booking (name, staying_for, arriving_on) values ($1, $2, $3)";
 
+pool.query(INSERT_QUERY,[name,days,arrivingOn]);
 	if (days && name && arrivingOn) {
 		kittens.push({
 			id : kittens.length+1,
