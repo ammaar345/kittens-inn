@@ -3,7 +3,22 @@ const express = require("express");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser"); 	// add this line
 const app = express();
+const pg = require("pg");
+const Pool = pg.Pool;
+const connectionString = process.env.DATABASE_URL || 'postgresql://codex:pg123@localhost:3009/kitten_inn';
 
+const pool = new Pool({
+    connectionString
+  });
+  async function queryDB() {
+	
+	const param1 = "value";
+
+	let results = await pool.query('select field1, field2 from your_table where id = $1', [param1]);
+	
+	return results;
+
+}
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false })); // add this line
 app.use(bodyParser.json()); // add  this line
