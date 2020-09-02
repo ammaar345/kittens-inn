@@ -49,7 +49,7 @@ app.post("/filter", async function (req, res) {
 	let filteredData = [];
 	if (daysFilter === "three") {
 		const lessThan3='select id ,name ,staying_for as days ,arriving_on as "arrivingOn" from booking where staying_for<=3';
-	const result=await	pool.query(lessThan3)
+	const result= await	pool.query(lessThan3)
 	filteredData=result.rows;
 		// filteredData = kittens.filter(function (kitten) {
 		// 	return kitten.days <= 3;
@@ -78,8 +78,8 @@ app.post("/booking", async function (req, res) {
 	const arrivingOn = req.body.day;
 	const INSERT_QUERY = "insert into booking (name, staying_for, arriving_on) values ($1, $2, $3)";
 
-	await pool.query(INSERT_QUERY, [name, days, arrivingOn]);
 	if (days && name && arrivingOn) {
+		await pool.query(INSERT_QUERY, [name, days, arrivingOn]);
 		
 		res.redirect("/");
 
@@ -107,11 +107,12 @@ app.post("/booking", async function (req, res) {
 			message: "Please select a arrival day"
 		});
 
+		let kittens = await pool.query('select id ,name,staying_for as days , arriving_on as "arrivingOn" from booking');
 
 		res.render("index", {
 			name,
 			days,
-			kittens,
+			kittens:kittens.rows,
 			daysInvalid,
 			arrivingOnInvalid,
 			kittenNameInvalid
